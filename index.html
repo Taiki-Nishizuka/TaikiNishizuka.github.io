@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Silent Authentication TEST</title>
+    <!--
+    <script src="https://cdn.auth0.com/js/auth0/9.11/auth0.min.js"></script>
+    <script type="text/javascript">
+      var auth0Client = new auth0.WebAuth({
+          clientID: 'DxxAmtwcX5nS6KCBoNjSQjMq2yAmlMV4',
+          redirectUri: 'https://slo.clubjt.jp/OC-SESSION-TIMEOUT.html&nonce=nonce1',
+          domain: 'sso.clubjt.jp'
+        });
+      auth0Client.crossOriginVerification();
+    </script>
+    -->
+</head>
+
+<body>
+    <h2>Silent Authentication TEST</h2>
+    <p>BackendでAuth0と通信し、Auth0側のセッションを延長する</p>
+    <!--
+     https://github.com/auth0/lock/blob/master/support/callback-cross-auth.html
+     https://auth0.com/docs/login/embedded-login/cross-origin-authentication#error-codes-and-descriptions
+      -->
+
+    <!--
+      iframeでSameSiteCookieがあることを前提に投げつける
+      https://github.com/auth0/auth0-spa-js/blob/041ce0aff5c94beff6d10b98c32441cfbc5c905a/src/utils.ts#L35
+
+      飛ばし先は以下
+      https://sso.clubjt.jp/authorize?
+      client_id=DxxAmtwcX5nS6KCBoNjSQjMq2yAmlMV4&
+      scope=openid&response_type=id_token&
+      prompt=none&
+      redirect_uri=https://slo.clubjt.jp/OC-SESSION-TIMEOUT.html&nonce=nonce1
+      (リダイレクト先はiframeが変な反応を出さないようにシステム共通のエラー画面などがよさそう
+
+      応答としては以下(iframeの中、いずれもhashなのでサーバまでは飛ばない)
+　      すでに認証済みの場合：location:https://slo.clubjt.jp/OC-SESSION-TIMEOUT.html#id_token=eyJhbGciO…
+ 　     未認証の場合：https://slo.clubjt.jp/OC-SESSION-TIMEOUT.html#error=login_required&error_description=Login%20required
+    -->
+    <script>
+        const auth0frame = window.document.createElement('iframe');
+        auth0frame.setAttribute('width', '0');
+        auth0frame.setAttribute('height', '0');
+        auth0frame.style.display = 'none';
+        window.document.body.appendChild(auth0frame);
+        auth0frame.setAttribute('src', 'https://design-test-j.us.auth0.com/authorize?client_id=Pzk6fkImfAHHX5xZqRU7TsCQqsPu7lTI&scope=openid&response_type=id_token&prompt=none&redirect_uri=https://tools.ietf.org/rfc/rfc6750&nonce=nonce1');
+    </script>
+</body>
+
+</html>
